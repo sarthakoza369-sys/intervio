@@ -1,0 +1,27 @@
+info:
+  name: Start an Interview
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:5000/api/interview/start
+  headers:
+    - name: auth-token
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNmE0ZDM1MDNiMmUxNjliYWFmZDVkYjc3In0sImlhdCI6MTc4MzQ0NDczOX0.KpDf-oG5HEObUQPZ5RLIkqFqVhfaKNNew79qMkfeMw0
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "topic": "JavaScript",
+        "difficulty": "Hard"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

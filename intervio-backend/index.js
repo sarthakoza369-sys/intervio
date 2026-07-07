@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json()) // use this as MIDDLEWARE if u r using req.body
 
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/interview', require('./routes/interview'));
 
 app.listen(port, () => {
   console.log(`Intervio backend listening on port ${port}`);
