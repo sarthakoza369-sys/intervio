@@ -25,9 +25,9 @@ const interviewSchema = new Schema({
         type: Date, 
         default: Date.now 
     },
-
+    currentInteractionId: String,
     endedAt: Date,
-    
+
     duration: Number,
 });
 
