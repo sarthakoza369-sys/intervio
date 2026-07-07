@@ -1,4 +1,6 @@
-// Question.js — brand new file
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
+
 const questionSchema = new Schema({
     interview: { 
         type: mongoose.Schema.Types.ObjectId, 
@@ -7,7 +9,10 @@ const questionSchema = new Schema({
     
     topic: String,        
     
-    difficulty: String,
+    difficulty: {
+        type: String,
+        enum: ['Easy', 'Medium', 'Hard'] 
+    },
     
     question: String,
     
