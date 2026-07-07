@@ -1,0 +1,26 @@
+info:
+  name: Create a new User
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:5000/api/auth/createUser
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "name":"Test User",
+        "email": "TU@gmail.com",
+        "password": "Thisistestuser"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
