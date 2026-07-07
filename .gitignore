@@ -38,8 +38,9 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
-# Dependency directories
+# Dependency directories (Updated for nested subfolders)
 node_modules/
+**/node_modules/
 jspm_packages/
 
 # Snowpack dependency directory (https://snowpack.dev/)
@@ -72,12 +73,17 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variable files
+# dotenv environment variable files (Updated to protect local keys in subfolders)
 .env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+**/.env
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+**/.env.local
+
+# Build/dist outputs (Added to block frontend build artifacts)
+**/dist/
+**/build/
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
