@@ -1,0 +1,25 @@
+info:
+  name: Answer a question
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:5000/api/interview/6a4df39b6d2bdfbfcfcdc2ca/answer
+  headers:
+    - name: auth-token
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNmE0ZDM1MDNiMmUxNjliYWFmZDVkYjc3In0sImlhdCI6MTc4MzQ0NDczOX0.KpDf-oG5HEObUQPZ5RLIkqFqVhfaKNNew79qMkfeMw0
+  body:
+    type: json
+    data: |-
+      {
+        "questionId": "6a4df6606d2bdfbfcfcdc2cd",
+        "answer": "React sends asynchronous HTTP requests to Express API endpoints using fetch or Axios. Data is exchanged in JSON format. Because they run on separate ports, the backend must enable CORS to allow this cross-origin communication."
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -7,7 +7,7 @@ const fetchuser = require('../middleware/fetchuser');
 const { generateFirstQuestion, evaluateAndGetNextQuestion } = require('../services/aiservices');
 
 const VALID_TOPICS = [
-    'JavaScript', 'React', 'Node.js', 'Express.js', 'MongoDB',
+    'JavaScript', 'React', 'Node.js', 'Express.js', 'MERN', 'MongoDB',
     'MERN Stack', 'HTML/CSS', 'Data Structures',
     'Operating Systems', 'DBMS', 'OOP', 'HR Interview'
 ];
@@ -22,6 +22,26 @@ router.post('/start', fetchuser, [
         if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         const { topic, difficulty } = req.body;
+
+           // Check for an unfinished interview on this topic first
+            const existingInterview = await Interview.findOne({
+                interviewee: req.user.id,
+                topic,
+                status: 'in-progress'
+            });
+
+            if (existingInterview) {
+                const pendingQuestion = await Question.findOne({
+                    interview: existingInterview._id,
+                    score: { $exists: false }
+                }).sort({ createdAt: -1 });
+
+            return res.json({
+                resumed: true,
+                interview: existingInterview,
+                question: pendingQuestion
+            });
+        }
 
         const interview = await Interview.create({ topic, difficulty, interviewee: req.user.id });
 
@@ -96,7 +116,7 @@ router.post('/:id/answer', fetchuser, [
         interview.currentInteractionId = interactionId;
         await interview.save();
 
-        res.json({ evaluatedQuestion: questionDoc, nextQuestion: nextQuestionDoc });
+        res.json({nextQuestion: nextQuestionDoc });
     } catch (err) {
         console.log(err.message);
         res.status(500).send({ error: err.message });
@@ -128,11 +148,93 @@ router.post('/:id/stop', fetchuser, async (req, res) => {
         interview.overallScore = overallScore;
         await interview.save();
 
-        res.json({ interview, questionsAnswered: answeredQuestions.length });
+        res.json({ success: true, interview, questionsAnswered: answeredQuestions.length, reportCard: answeredQuestions });
     } catch (err) {
         console.log(err.message);
         res.status(500).send({ error: err.message });
     }
 });
 
+// ROUTE 4: Get all interviews based on their topics using GET: "/api/interview/topic/:topic"
+
+router.get('/topic/:topic', fetchuser,
+    async(req, res)=>{
+    try{
+        const {topic} = req.body;
+
+        if(!VALID_TOPICS.includes(topic)) return res.status(400).json({error: "Invalid Topic"});
+
+        const interviews = await Interview.find({interviewee: req.user.id, topic: topic}).sort({startedAt:-1});
+
+        const interviewsWithQuestions = await Promise.all(
+            interviews.map(async (interview) => {
+                const questions = await Question.find({ interview: interview._id });
+                return { interview, questions };
+            })
+        );
+
+        res.json(interviewsWithQuestions);
+    }catch(err){
+        console.log(err.message);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+
+// ROUTE 5: Dashboard summary — GET /api/interview/dashboard
+router.get('/dashboard', fetchuser, async (req, res) => {
+    try {
+        const userId = new mongoose.Types.ObjectId(req.user.id);
+
+        const topicStats = await Interview.aggregate([
+            { $match: { interviewee: userId, status: 'completed' } },
+            { 
+                $group: { 
+                    _id: "$topic", 
+                    count: { $sum: 1 },
+                    avgScore: { $avg: "$overallScore" }
+                } 
+            }
+        ]);
+
+        const totalInterviews = topicStats.reduce((sum, t) => sum + t.count, 0);
+
+        const overallAvgScore = totalInterviews
+            ? topicStats.reduce((sum, t) => sum + (t.avgScore * t.count), 0) / totalInterviews
+            : 0;
+
+        const strongestTopic = topicStats.length
+            ? topicStats.reduce((a, b) => (a.avgScore > b.avgScore ? a : b))
+            : null;
+
+        const weakestTopic = topicStats.length
+            ? topicStats.reduce((a, b) => (a.avgScore < b.avgScore ? a : b))
+            : null;
+
+        res.json({totalInterviews,overallAvgScore,strongestTopic,weakestTopic,topicStats});
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send({ error: err.message });
+    }
+});
+
+// ROUTE 6: Get one specific interview by ID using GET /api/interview/:id
+router.get('/:id', fetchuser, async (req, res) => {
+    try {
+        const interview = await Interview.findById(req.params.id);
+
+        if (!interview) return res.status(404).json({ error: "Interview not found" });
+
+        if (interview.interviewee.toString() !== req.user.id) {
+            return res.status(403).json({ error: "Not authorized" });
+        }
+
+        const questions = await Question.find({ interview: interview._id });
+
+        res.json({ interview, questions });
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send({ error: err.message });
+    }
+});
 module.exports = router;

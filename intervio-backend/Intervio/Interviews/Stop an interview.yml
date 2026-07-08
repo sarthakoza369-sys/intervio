@@ -1,23 +1,14 @@
 info:
-  name: Start an Interview
+  name: Stop an interview
   type: http
-  seq: 1
+  seq: 3
 
 http:
   method: POST
-  url: http://localhost:5000/api/interview/start
+  url: http://localhost:5000/api/interview/6a4df39b6d2bdfbfcfcdc2ca/stop
   headers:
     - name: auth-token
       value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNmE0ZDM1MDNiMmUxNjliYWFmZDVkYjc3In0sImlhdCI6MTc4MzQ0NDczOX0.KpDf-oG5HEObUQPZ5RLIkqFqVhfaKNNew79qMkfeMw0
-    - name: Content-Type
-      value: application/json
-  body:
-    type: json
-    data: |-
-      {
-        "topic": "MERN",
-        "difficulty": "Easy"
-      }
   auth: inherit
 
 settings:
