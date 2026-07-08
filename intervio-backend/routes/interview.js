@@ -5,6 +5,7 @@ const Question = require('../models/Question');
 const { body, validationResult } = require('express-validator');
 const fetchuser = require('../middleware/fetchuser');
 const { generateFirstQuestion, evaluateAndGetNextQuestion } = require('../services/aiservices');
+const mongoose = require('mongoose')
 
 const VALID_TOPICS = [
     'JavaScript', 'React', 'Node.js', 'Express.js', 'MERN', 'MongoDB',
@@ -57,7 +58,7 @@ router.post('/start', fetchuser, [
         res.json({ interview, question: questionDoc });
     } catch (err) {
         console.log(err.message);
-        res.status(500).send({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -160,7 +161,7 @@ router.post('/:id/stop', fetchuser, async (req, res) => {
 router.get('/topic/:topic', fetchuser,
     async(req, res)=>{
     try{
-        const {topic} = req.body;
+        const {topic} = req.params;
 
         if(!VALID_TOPICS.includes(topic)) return res.status(400).json({error: "Invalid Topic"});
 
