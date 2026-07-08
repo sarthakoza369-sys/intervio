@@ -17,6 +17,7 @@ const handleSubmit = async (e)=>{
         },
         body: JSON.stringify({email: credentials.email, password: credentials.password})
     });
+    const json = await response.json();
 
     if (response.ok){
         localStorage.setItem('token', json.authToken);
@@ -32,7 +33,6 @@ const onChange=(e)=>{
     setCredentials({...credentials, [e.target.name]: e.target.value})
 }
     
-
   return (
    <div className="min-h-screen bg-[#0B0F19] text-white flex flex-col justify-center items-center relative overflow-hidden font-sans px-4">
       
