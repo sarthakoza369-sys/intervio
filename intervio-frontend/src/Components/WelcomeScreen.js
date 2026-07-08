@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function WelcomeScreen() {
+const WelcomeScreen=()=> {
   return (
     <div className="min-h-screen bg-[#0B0F19] text-white flex flex-col justify-between relative overflow-hidden font-sans">
       
@@ -88,3 +88,5 @@ export default function WelcomeScreen() {
     </div>
   );
 }
+
+export default WelcomeScreen;
