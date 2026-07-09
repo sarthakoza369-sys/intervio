@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import interviewContext from './interviewContext'
 
-const InterviewState = () => {
+const InterviewState = (props) => {
 
     const host = "http://localhost:5000"
 
@@ -103,6 +103,73 @@ const InterviewState = () => {
             return { success: false, error: json.error };
         }
     }
+
+    //GET ALL INTERVIEWS FOR DASHBOARD
+    const getDashboardInterview = async(weakestTopic, strongestTopic)=>{
+
+        //API CALL
+        const response = await fetch(`${host}/api/interview/dashboard`,{
+              method: 'GET',
+                headers: {
+                   'Content-Type': 'application/json',
+                   'auth-token': localStorage.getItem('token')
+             },
+        });
+        const json = await response.json();
+        setLoading(false);
+
+        if(response.ok){
+            return {
+                success: true, 
+                totalInterviews: json.totalInterviews, 
+                overallAvgScore: json.overallAvgScore,
+                strongestTopic: json.strongestTopic,
+                weakestTopic: json.weakestTopic,
+                topicStats: json.topicStats
+            }
+        }else{
+            return { success: false, error: json.error };
+        }
+    }
+
+    const getSpecificInterview=async(id)=>{
+
+        //API CALL
+        const response = await fetch(`${host}/api/interview/${id}`,{
+             method: 'GET',
+             headers: {
+                'Content-Type': 'application/json',
+                'auth-token': localStorage.getItem('token')
+          },
+        });
+        const json = await response.json();
+        setLoading(false);
+
+        if(response.ok){
+            return {success: true, interview: json.interview, questions: json.questions}
+        }else{
+            return { success: false, error: json.error };
+        }
+    }
+    
+    return (
+        <interviewContext.Provider 
+            value={{ 
+                interview, 
+                question, 
+                loading, 
+                startInterview, 
+                userAnswer, 
+                stopInterview, 
+                getInterviewByTopic, 
+                getDashboardInterview, 
+                getSpecificInterview 
+            }}
+        >
+            {props.children}
+        </interviewContext.Provider>
+    )
+
 }
 
 export default InterviewState

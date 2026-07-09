@@ -235,7 +235,7 @@ router.get('/:id', fetchuser, async (req, res) => {
         res.json({ interview, questions });
     } catch (err) {
         console.log(err.message);
-        res.status(500).send({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 });
 module.exports = router;
