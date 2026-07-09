@@ -30,7 +30,7 @@ import { Link } from 'react-router-dom';
       {/* Action Footer */}
       <div className="flex items-center justify-between mt-4 relative z-10 pt-2 border-t border-slate-800/40 group-hover:border-indigo-500/20 transition-colors">
         <span className="text-xs font-medium text-slate-400 group-hover:text-indigo-400 transition-colors duration-300">
-          Start Mock Session
+          View Details
         </span>
         
         {/* Animated Arrow Icon */}
