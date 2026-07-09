@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import interviewContext from './interviewContext'
+import InterviewContext from './interviewContext'
 
 const InterviewState = (props) => {
 
@@ -153,7 +153,7 @@ const InterviewState = (props) => {
     }
     
     return (
-        <interviewContext.Provider 
+        <InterviewContext.Provider 
             value={{ 
                 interview, 
                 question, 
@@ -167,7 +167,7 @@ const InterviewState = (props) => {
             }}
         >
             {props.children}
-        </interviewContext.Provider>
+        </InterviewContext.Provider>
     )
 
 }

@@ -1,5 +1,5 @@
-import { createContext } from "react-router-dom";
+import { createContext } from "react";
 
-const interviewContext = createContext();
+const InterviewContext = createContext();
 
-export default interviewContext;
+export default InterviewContext;
