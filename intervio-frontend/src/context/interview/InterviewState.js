@@ -105,7 +105,7 @@ const InterviewState = (props) => {
     }
 
     //GET ALL INTERVIEWS FOR DASHBOARD
-    const getDashboardInterview = async(weakestTopic, strongestTopic)=>{
+    const getDashboardInterview = async()=>{
 
         //API CALL
         const response = await fetch(`${host}/api/interview/dashboard`,{
