@@ -27,26 +27,34 @@ router.post('/start', fetchuser, [
         const { topic, difficulty } = req.body;
         console.log("2. Checking for existing interview");
 
+        // Check for an unfinished interview on this topic first
+        const existingInterview = await Interview.findOne({
+            interviewee: req.user.id,
+            topic,
+            status: 'in-progress'
+        });
+        console.log("3. Existing interview check done");
 
-           // Check for an unfinished interview on this topic first
-            const existingInterview = await Interview.findOne({
-                interviewee: req.user.id,
-                topic,
-                status: 'in-progress'
-            });
-            console.log("3. Existing interview check done");
+        if (existingInterview) {
+            const pendingQuestion = await Question.findOne({
+                interview: existingInterview._id,
+                score: { $exists: false }
+            }).sort({ createdAt: -1 });
 
-            if (existingInterview) {
-                const pendingQuestion = await Question.findOne({
-                    interview: existingInterview._id,
-                    score: { $exists: false }
-                }).sort({ createdAt: -1 });
+            if (pendingQuestion) {
+                console.log("3a. Resuming existing interview with a pending question");
+                return res.json({
+                    resumed: true,
+                    interview: existingInterview,
+                    question: pendingQuestion
+                });
+            }
 
-            return res.json({
-                resumed: true,
-                interview: existingInterview,
-                question: pendingQuestion
-            });
+            // No question ever got created for this interview (likely a prior AI call failed).
+            // Don't resume a dead end — mark it abandoned and fall through to start fresh.
+            console.log("3b. Existing interview has no pending question — marking abandoned");
+            existingInterview.status = 'abandoned';
+            await existingInterview.save();
         }
 
         const interview = await Interview.create({ topic, difficulty, interviewee: req.user.id });

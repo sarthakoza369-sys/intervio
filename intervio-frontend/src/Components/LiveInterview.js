@@ -7,8 +7,7 @@ const LiveInterview = () => {
     const navigate = useNavigate();
 
     const context = useContext(InterviewContext);
-    const { interview, question, loading, userAnswer, stopInterview, getSpecificInterview } = context;
-
+    const { interview, question, loading, userAnswer, stopInterview, getSpecificInterview, setInterview,      setQuestion } = context;
     const [answerText, setAnswerText] = useState('');
     const [conversationLog, setConversationLog] = useState([]);
     const [submitting, setSubmitting] = useState(false);
@@ -17,11 +16,20 @@ const LiveInterview = () => {
     // Safety net: if this page is opened directly (refresh, shared link)
     // and context has no active question, re-fetch the interview state.
     useEffect(() => {
-        if (!question) {
-            getSpecificInterview(id);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    if (!question) {
+        const fetchQuestion = async () => {
+            const result = await getSpecificInterview(id);
+            if (result.success && result.questions?.length) {
+                // find the most recent unanswered question
+                const pending = result.questions.find(q => q.score === undefined);
+                setInterview(result.interview);
+                setQuestion(pending);
+            }
+        };
+        fetchQuestion();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
     const handleSubmitAnswer = async (e) => {
         e.preventDefault();
@@ -37,7 +45,7 @@ const LiveInterview = () => {
         setSubmitting(false);
 
         if (result.success) {
-            // Log the just-answered exchange (no feedback shown yet, per plan)
+            // Log the just-answered exchange (no feedback shown yet)
             setConversationLog(prev => [
                 ...prev,
                 { question: currentQuestionText, answer: answerText }
