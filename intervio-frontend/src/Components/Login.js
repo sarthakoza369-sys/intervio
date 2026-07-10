@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
-    const [credentials, setCredentials] = useState({email:"", pssword: ""});
+    const [credentials, setCredentials] = useState({email:"", password: ""});
     let navigate = useNavigate();
 
 const handleSubmit = async (e)=>{
@@ -24,7 +24,7 @@ const handleSubmit = async (e)=>{
         navigate('/home');
     }
     else{
-        alert("Invalid Credentials!!");
+        alert(json.error || "Invalid credentials!!");
         return false;
     }
 };
@@ -96,6 +96,7 @@ const onChange=(e)=>{
               <input 
                 type="password" 
                 value={credentials.password}
+                onChange={onChange}
                 id="password"
                 name="password"
                 placeholder="••••••••" 
