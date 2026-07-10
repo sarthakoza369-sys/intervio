@@ -4,6 +4,9 @@ import Login from "./Components/Login";
 import Home from "./Components/Home"
 import Signup from "./Components/Signup";
 import InterviewState from '../src/context/interview/InterviewState'
+import TopicDetails from "./Components/TopicDetails";
+import LiveInterview from "./Components/LiveInterview";
+import InterviewResults from "./Components/InterviewResults";
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
           <Route path='/login' element={<Login/>}/>
           <Route path='/home' element={<Home/>}/>
           <Route path='/signup' element={<Signup/>}/>
+          <Route path="/topic/:topicSlug" element={<TopicDetails />} />
+          <Route path="/interview/:id" element={<LiveInterview />} />
+          <Route path="/results/:id" element={<InterviewResults />} />
         </Routes>
       </Router>
     </InterviewState>

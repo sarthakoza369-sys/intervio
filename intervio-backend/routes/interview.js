@@ -8,7 +8,7 @@ const { generateFirstQuestion, evaluateAndGetNextQuestion } = require('../servic
 const mongoose = require('mongoose')
 
 const VALID_TOPICS = [
-    'JavaScript', 'React', 'Node.js', 'Express.js', 'MERN', 'MongoDB',
+    'JavaScript', 'React', 'Node.js', 'Express.js', 'MongoDB',
     'MERN Stack', 'HTML/CSS', 'Data Structures',
     'Operating Systems', 'DBMS', 'OOP', 'HR Interview'
 ];
@@ -19,10 +19,14 @@ router.post('/start', fetchuser, [
     body("difficulty", "Difficulty must be Easy, Medium, or Hard").isIn(['Easy', 'Medium', 'Hard'])
 ], async (req, res) => {
     try {
+
+        console.log("1. Route started");
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         const { topic, difficulty } = req.body;
+        console.log("2. Checking for existing interview");
+
 
            // Check for an unfinished interview on this topic first
             const existingInterview = await Interview.findOne({
@@ -30,6 +34,7 @@ router.post('/start', fetchuser, [
                 topic,
                 status: 'in-progress'
             });
+            console.log("3. Existing interview check done");
 
             if (existingInterview) {
                 const pendingQuestion = await Question.findOne({
@@ -46,7 +51,9 @@ router.post('/start', fetchuser, [
 
         const interview = await Interview.create({ topic, difficulty, interviewee: req.user.id });
 
+        console.log("4. About to call generateFirstQuestion");
         const { interactionId, question } = await generateFirstQuestion(topic, difficulty);
+        console.log("5. AI call finished!");
 
         interview.currentInteractionId = interactionId;
         await interview.save();
@@ -171,7 +178,7 @@ router.get('/topic/:topic', fetchuser,
             interviews.map(async (interview) => {
                 const questions = await Question.find({ interview: interview._id });
                 return { interview, questions };
-            })
+            }),
         );
 
         res.json(interviewsWithQuestions);

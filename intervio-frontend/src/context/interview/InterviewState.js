@@ -9,7 +9,6 @@ const InterviewState = (props) => {
     const [question, setQuestion] = useState(null);
     const [loading, setLoading] = useState(false);
  
-    //START AN INTERVIEW
     const startInterview = async(topic, difficulty)=>{
 
         //API CALL
@@ -28,12 +27,15 @@ const InterviewState = (props) => {
         if(response.ok){
             setInterview(json.interview);
             setQuestion(json.question);
-            return {success: true}
+            return{
+                interview: json.interview,
+                question: json.question,
+                success: true
+            }
         }else{
             return {success: false, error: json.error}
         }
-    }
-
+}   
     //ANSWER A QUESTION
     const userAnswer = async(id, answer, questionId)=>{
 
@@ -98,7 +100,7 @@ const InterviewState = (props) => {
         setLoading(false);
 
         if(response.ok){
-            return { success: true, interviewsWithQuestions: json };
+            return { success: true, interviewsWithQuestions: json};
         }else{
             return { success: false, error: json.error };
         }
