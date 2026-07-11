@@ -9,6 +9,7 @@ const InterviewState = (props) => {
     const [question, setQuestion] = useState(null);
     const [loading, setLoading] = useState(false);
  
+    //START AN INTERVIEW
     const startInterview = async(topic, difficulty)=>{
 
         //API CALL
@@ -35,7 +36,8 @@ const InterviewState = (props) => {
         }else{
             return {success: false, error: json.error}
         }
-}   
+    }   
+
     //ANSWER A QUESTION
     const userAnswer = async(id, answer, questionId)=>{
 
@@ -61,7 +63,6 @@ const InterviewState = (props) => {
     }
 
     //STOP AN INTERVIEW
-    
     const stopInterview = async(id)=>{
 
         //API CALL
@@ -78,7 +79,7 @@ const InterviewState = (props) => {
 
         if(response.ok){
             setInterview(json.interview);
-            return { success: true, questionsAnswered: json.questionsAnswered, reportCard: json.reportCard }
+            return { success: true, interview: json.interview, questionsAnswered: json.questionsAnswered, reportCard: json.reportCard }
         }else{
             return { success: false, error: json.error };
         }
@@ -100,7 +101,7 @@ const InterviewState = (props) => {
         setLoading(false);
 
         if(response.ok){
-            return { success: true, interviewsWithQuestions: json};
+            return { success: true, interviewsWithQuestions: json };
         }else{
             return { success: false, error: json.error };
         }
@@ -134,6 +135,7 @@ const InterviewState = (props) => {
         }
     }
 
+    //GET ONE SPECIFIC INTERVIEW
     const getSpecificInterview=async(id)=>{
 
         //API CALL

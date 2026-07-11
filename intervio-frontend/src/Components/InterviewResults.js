@@ -14,7 +14,6 @@ const InterviewResults = () => {
     const [loading, setLoading] = useState(!location.state);
 
     useEffect(() => {
-        // If we didn't arrive with state (e.g. page was refreshed), re-fetch
         if (!location.state) {
             const fetchData = async () => {
                 const result = await getSpecificInterview(id);
@@ -45,6 +44,9 @@ const InterviewResults = () => {
         );
     }
 
+    // Filter out the trailing unanswered question generated right before stopping
+    const answeredQuestions = (reportCard || []).filter(q => q.score !== undefined);
+
     return (
         <div className="min-h-screen bg-[#0B0F19] text-white p-6 md:p-12">
             <div className="max-w-4xl mx-auto">
@@ -56,7 +58,6 @@ const InterviewResults = () => {
                     Back to Dashboard
                 </Link>
 
-                {/* Summary Header */}
                 <div className="bg-[#121824] border border-slate-800/80 rounded-2xl p-8 mb-8 text-center">
                     <p className="text-sm text-slate-400 mb-2">{interview.topic} · {interview.difficulty}</p>
                     <h1 className="text-5xl font-extrabold text-indigo-400 mb-2">
@@ -64,13 +65,12 @@ const InterviewResults = () => {
                         <span className="text-2xl text-slate-500">/10</span>
                     </h1>
                     <p className="text-sm text-slate-400">
-                        {reportCard?.length || 0} questions answered
+                        {answeredQuestions.length} questions answered
                     </p>
                 </div>
 
-                {/* Per-question breakdown */}
                 <div className="space-y-6">
-                    {reportCard && reportCard.map((q, index) => (
+                    {answeredQuestions.map((q, index) => (
                         <div key={q._id || index} className="bg-[#121824] border border-slate-800/80 rounded-xl p-6">
                             <div className="flex items-start justify-between mb-4">
                                 <h3 className="text-sm font-bold text-slate-200">

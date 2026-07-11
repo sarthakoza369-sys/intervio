@@ -9,7 +9,6 @@ const TopicDetails = () => {
    const navigate = useNavigate();
    const {topicSlug} = useParams();
 
-    // Convert slug back to real topic name, e.g. "data-structures" -> "Data Structures"
     const topic = TOPIC_SLUG_MAP[topicSlug];
 
     const context = useContext(InterviewContext);
@@ -43,13 +42,11 @@ const TopicDetails = () => {
     
   return (
     <div className="min-h-screen bg-[#0B0F19] text-white p-6 md:p-12 relative overflow-hidden">
-      {/* Background Ambient Glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-5xl mx-auto relative z-10">
         
-        {/* Navigation Breadcrumb Action Header */}
         <div className="mb-6">
           <Link 
             to="/home" 
@@ -62,7 +59,6 @@ const TopicDetails = () => {
           </Link>
         </div>
 
-        {/* Dynamic Title Context Board */}
         <header className="mb-10 pb-6 border-b border-slate-800/60 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-100 md:text-4xl bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
@@ -73,7 +69,6 @@ const TopicDetails = () => {
             </p>
           </div>
 
-          {/* Premium Simulation Triggers */}
           <div className="relative">
             <button 
               onClick={() => setShowDifficultyPicker(prev => !prev)}
@@ -103,9 +98,7 @@ const TopicDetails = () => {
           </div>
         </header>
 
-        {/* Conditional Layout Rendering */}
         {interviews.length === 0 ? (
-          /* Empty State Content Block */
           <div className="flex flex-col items-center justify-center text-center p-12 bg-[#121824] border border-slate-800/80 rounded-2xl border-dashed">
             <div className="w-12 h-12 rounded-xl bg-slate-950/60 border border-slate-800 flex items-center justify-center mb-4 text-slate-500">
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -118,15 +111,14 @@ const TopicDetails = () => {
             </p>
           </div>
         ) : (
-          /* Populated Interview Session Cards List Grid */
           <div className="space-y-4">
             {interviews.map((item, index) => (
               <div 
                 key={item.interview._id}
+                onClick={() => navigate(`/results/${item.interview._id}`)}
                 className="bg-[#121824] border border-slate-800/80 hover:border-slate-700/80 rounded-xl p-5 transition-all duration-200 flex items-center justify-between group cursor-pointer"
               >
                 <div className="flex items-center gap-4">
-                  {/* Performance Numeric Bullet Index Ring */}
                   <div className="w-10 h-10 rounded-lg bg-slate-950/60 border border-slate-800 flex flex-col items-center justify-center">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Mock</span>
                     <span className="text-xs font-extrabold text-indigo-400 mt-[-2px]">{index + 1}</span>
@@ -143,7 +135,6 @@ const TopicDetails = () => {
                 </div>
 
                 <div className="flex items-center gap-6">
-                  {/* Status Performance Evaluation Score Rating Indicator */}
                   <div className="text-right">
                     <span className="text-[10px] block font-bold text-slate-500 uppercase tracking-wider mb-0.5">Score</span>
                     <span className="text-sm font-extrabold text-emerald-400">
@@ -151,7 +142,6 @@ const TopicDetails = () => {
                     </span>
                   </div>
 
-                  {/* Micro Trigger Action Caret */}
                   <div className="w-7 h-7 rounded-lg bg-slate-950/40 border border-slate-800 group-hover:border-indigo-500/30 group-hover:bg-indigo-500/10 transition-all duration-200 flex items-center justify-center">
                     <svg className="w-3.5 h-3.5 text-slate-500 group-hover:text-indigo-400 transform group-hover:translate-x-0.5 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />

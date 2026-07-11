@@ -30,10 +30,16 @@ const evaluationAndNextSchema = {
 };
 
 // First question of the interview — no previous_interaction_id, since nothing to chain onto yet
-const generateFirstQuestion = async (topic, difficulty) => {
+// previousQuestions: list of question strings from this user's past interviews on this topic,
+// used to steer the AI away from repeating the same questions every time
+const generateFirstQuestion = async (topic, difficulty, previousQuestions = []) => {
+    const avoidClause = previousQuestions.length
+        ? `\n\nDo NOT repeat any of these previously asked questions — ask something different:\n${previousQuestions.map(q => `- ${q}`).join('\n')}`
+        : '';
+
     const prompt = `
 You are an experienced software engineering interviewer conducting a mock interview.
-Generate ONE interview question for the topic "${topic}" at "${difficulty}" difficulty.
+Generate ONE interview question for the topic "${topic}" at "${difficulty}" difficulty.${avoidClause}
 `;
     const interaction = await ai.interactions.create({
         model: "gemini-3.5-flash",
