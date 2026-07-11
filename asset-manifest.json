@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/intervio/static/css/main.d6d5c874.css",
+    "main.js": "/intervio/static/js/main.921e5dfe.js",
+    "static/js/453.9bde054b.chunk.js": "/intervio/static/js/453.9bde054b.chunk.js",
+    "index.html": "/intervio/index.html",
+    "main.d6d5c874.css.map": "/intervio/static/css/main.d6d5c874.css.map",
+    "main.921e5dfe.js.map": "/intervio/static/js/main.921e5dfe.js.map",
+    "453.9bde054b.chunk.js.map": "/intervio/static/js/453.9bde054b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d6d5c874.css",
+    "static/js/main.921e5dfe.js"
+  ]
+}
