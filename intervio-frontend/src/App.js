@@ -10,21 +10,35 @@ import InterviewResults from "./Components/InterviewResults";
 import AlertState from "./context/alert/AlertState";
 import Alert from "./Components/Alert";
 
+const ProtectedRoute = ({children})=>{
+  const token = localStorage.getItem('token');
+
+  //If no token exists, immediately redirect to landing page instead of flashing
+  if(!token){
+    return <Navigate to='/' replace/>
+  } 
+  return children;
+}
+
 function App() {
   return (
     <>
    <AlertState>
     <InterviewState>
       <Alert />
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <Routes>
+
+          {/* Public Entry Points */}
           <Route path='/' element={<WelcomeScreen/>}/>
           <Route path='/login' element={<Login/>}/>
-          <Route path='/home' element={<Home/>}/>
           <Route path='/signup' element={<Signup/>}/>
-          <Route path="/topic/:topicSlug" element={<TopicDetails />} />
-          <Route path="/interview/:id" element={<LiveInterview />} />
-          <Route path="/results/:id" element={<InterviewResults />} />
+
+          {/* Protected Dashboards (Wrapped Safe) */}
+          <Route path='/home' element={<ProtectedRoute><Home/></ProtectedRoute>}/>
+          <Route path="/topic/:topicSlug" element={<ProtectedRoute><TopicDetails /></ProtectedRoute>} />
+          <Route path="/interview/:id" element={<ProtectedRoute><LiveInterview /></ProtectedRoute>} />
+          <Route path="/results/:id" element={<ProtectedRoute><InterviewResults /></ProtectedRoute>} />
         </Routes>
       </Router>
     </InterviewState>
