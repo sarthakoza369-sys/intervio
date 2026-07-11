@@ -3,7 +3,7 @@ import InterviewContext from './interviewContext'
 
 const InterviewState = (props) => {
 
-    const host = "http://localhost:5000"
+    const host = "https://intervio-gba4.onrender.com"
 
     const [interview, setInterview] = useState(null);
     const [question, setQuestion] = useState(null);

@@ -27,7 +27,7 @@ const Signup = (props) => {
 
     try {
       // NOTE: Swap this URL out for your actual local / production intervio endpoint later!
-      const response = await fetch("http://localhost:5000/api/auth/createUser", {
+      const response = await fetch("https://intervio-gba4.onrender.com/api/auth/createUser", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
