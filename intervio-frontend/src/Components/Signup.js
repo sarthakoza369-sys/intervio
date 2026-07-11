@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import AlertContext from '../context/alert/AlertContext';
 
 const Signup = (props) => {
   const [credentials, setCredentials] = useState({
@@ -10,6 +11,9 @@ const Signup = (props) => {
   });
   
   let navigate = useNavigate();
+
+  const alertContext = useContext(AlertContext);
+  const { showAlert } = alertContext;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,6 +39,7 @@ const Signup = (props) => {
       
       if (response.ok) {
         localStorage.setItem('token', json.authToken);
+        showAlert("Account created successfully", "success");
         navigate('/home');
       } else {
         alert(json.error || "Something went wrong on the server.");

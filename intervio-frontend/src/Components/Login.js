@@ -1,10 +1,14 @@
-import React,{useState} from "react";
+import React,{useState, useContext} from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import AlertContext from "../context/alert/AlertContext";
 
 const Login = () => {
 
     const [credentials, setCredentials] = useState({email:"", password: ""});
     let navigate = useNavigate();
+
+    const alertContext = useContext(AlertContext);
+    const { showAlert } = alertContext;
 
 const handleSubmit = async (e)=>{
 
@@ -21,6 +25,7 @@ const handleSubmit = async (e)=>{
 
     if (response.ok){
         localStorage.setItem('token', json.authToken);
+        showAlert("Logged in Successfully!!", "success");
         navigate('/home');
     }
     else{

@@ -7,11 +7,15 @@ import InterviewState from '../src/context/interview/InterviewState'
 import TopicDetails from "./Components/TopicDetails";
 import LiveInterview from "./Components/LiveInterview";
 import InterviewResults from "./Components/InterviewResults";
+import AlertState from "./context/alert/AlertState";
+import Alert from "./Components/Alert";
 
 function App() {
   return (
     <>
+   <AlertState>
     <InterviewState>
+      <Alert />
       <Router>
         <Routes>
           <Route path='/' element={<WelcomeScreen/>}/>
@@ -24,6 +28,7 @@ function App() {
         </Routes>
       </Router>
     </InterviewState>
+  </AlertState>
     </>
   );
 }
