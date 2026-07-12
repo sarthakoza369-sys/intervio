@@ -72,8 +72,21 @@ router.post('/start', fetchuser, [
         }).select('question').limit(20).sort({ createdAt: -1 });
         
         const previousQuestions = pastQuestions.map(q => q.question);
-        
+
+        console.log("4. About to call generateFirstQuestion");
         const { interactionId, question } = await generateFirstQuestion(topic, difficulty, previousQuestions);
+        console.log("5. AI call finished");
+
+        interview.currentInteractionId = interactionId;
+        await interview.save();
+
+        const questionDoc = await Question.create({
+            interview: interview._id, topic, difficulty, question
+        });
+
+        console.log("6. Sending response");
+        res.json({ interview, question: questionDoc });
+
     } catch (err) {
         console.log(err.message);
         res.status(500).json({ error: err.message });
